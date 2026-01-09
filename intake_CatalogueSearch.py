@@ -1,3 +1,9 @@
+"""Sweep across the ESGF metagrid for desired ocean variables and test PI
+and Historical run alignment and shortlists for cases where both PI and Historical have both
+direct carbon export outputs (expc and epc100) or auxiliary vars (thetao, o2 and so).
+
+"""
+
 import intake_esgf
 from intake_UtilFuncs import *
 from intake_esgf_mods.catalog import ESGFCatalog
