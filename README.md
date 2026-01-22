@@ -1,2 +1,2 @@
 # precog-data-intake
-Data sweep and scrapping from Earth System Grid Federation nodes
+Data sweep and scraping from Earth System Grid Federation nodes
