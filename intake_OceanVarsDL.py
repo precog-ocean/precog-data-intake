@@ -1,24 +1,19 @@
 
 """
-Loads Catalogue Dataframes for outputs of interest and downloads them
-to specified path in parallel. Once downloaded, it checks for file integrity
-and re-downloads if corrupted.
+Loads Catalogue Dataframes for outputs of interest and downloads in parallel to user-specified path.
+Once downloaded, it checks for file integrity and re-downloads if corrupted.
 
 Modify line 190 for the full sweep and download.
 """
 
 
 import ast
-import requests
-import os
-import pandas as pd
 from tqdm.auto import tqdm
+from intake_UtilFuncs import *
 import tqdm as tqdm2
 from multiprocessing.pool import ThreadPool
 import hashlib
 from pathlib import Path
-import tkinter as tk
-from tkinter import  filedialog
 from ascii_magic import AsciiArt
 
 def verify_hash(downloaded_file, expected_hash):
@@ -136,18 +131,17 @@ def test_dwnld_speed(df_single_line):
 
 if __name__=="__main__":
 
-    my_art = AsciiArt.from_image('./misc_images/precog_logo_full.png')
-    my_art.to_terminal(width_ratio=3)
+    print_precog_header()
 
     ### Defining paths and loading dataframes
     download_path = input("Define the download path. Either type path or drag desired download folder onto this terminal window:")
     download_path = Path(download_path.strip(" ")) #strip added as dragging onto terminal adds a trailing 'space'
 
-    df_filename = input("Now either drag onto terminal or type path to Dataframe with the Filtered ESGF search results:")
+    df_filename = input("Now either drag onto terminal or type path to Dataframe with the Filtered ESGF search results desired:")
     df_filename = Path(df_filename.strip(" ")).name #strip added as dragging onto terminal adds a trailing 'space'
 
     # ### Testing lines. Keep silent
-    # download_path = '/Users/leonardobertini/Downloads/test_download_CMIP6'
+    #download_path = '/Users/leonardobertini/Downloads/test_download_CMIP6'
     #df_filename = "/Users/leonardobertini/Downloads/test_download_CMIP6/DF_Downloadable_epc100.xlsx"
 
     print('Checking if Dataframe is readable')
@@ -155,7 +149,6 @@ if __name__=="__main__":
     print(f'Importing Dataframe {df_filename}')
 
     # ### Defining paths and loading dataframes using Tkinter system GUI window
-
     # print('Select Download path on the open window')
     # download_path = tk.filedialog.askdirectory(
     #                                         title='Select path where files will be downloaded to',
@@ -168,7 +161,7 @@ if __name__=="__main__":
     #                                         )
     # df_filename = Path(df_filename).name
 
-    # #Complete TODO Load filtered search 'Downloadable' Dataframe prompting user navigation
+    # #Complete TODO Load filtered search 'Downloadable' Dataframe prompting user for space required
     df_downloadable = pd.read_excel(os.path.join(download_path, df_filename))
 
     ## NOW ONTO DOWNLOADING FILES
@@ -200,9 +193,7 @@ if __name__=="__main__":
         print("Exiting...\n")
 
     #Motivanional quote
-    end_art = AsciiArt.from_image('./misc_images/squid.png')
-    end_art.to_terminal(columns=100)
-    print('You got the data. Now go be amazing!')
+    print_precog_quote()
 
 #############################################
 ########### NEXT STEPS ####################

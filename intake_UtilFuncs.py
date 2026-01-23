@@ -8,12 +8,14 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from ascii_magic import AsciiArt
 
+
 def print_precog_header():
-    for _ in range(0,2):
+    for _ in range(0, 2):
         print('\n')
-    my_art = AsciiArt.from_image('./misc_images/precog_logo_full.png') #path to logo image
+    my_art = AsciiArt.from_image('./misc_images/precog_logo_full.png')  # path to logo image
     my_art.to_terminal(width_ratio=3)
     return None
+
 
 def print_precog_quote():
     end_art = AsciiArt.from_image('./misc_images/squid3.png')
@@ -21,9 +23,13 @@ def print_precog_quote():
     print('You got the data. Now go be amazing!')
     return None
 
-def append_cols(PandasDataFrame, new_col_names, positional_order):
-    for col, idx in zip(new_col_names, positional_order):
-        print(f"Extracting info from dataset_id the following facet: {col} which appears as argument number: {idx}")
+
+def append_cols(PandasDataFrame):
+    col_names = ['source_id', 'experiment_id', 'variant_label', 'frequency', 'variable_id', 'grid_label']
+    positional_order = [3, 4, 5, 6, 7, 8]
+
+    for col, idx in zip(col_names, positional_order):
+        print(f"Extracting info from dataset_id the following facet: '{col}' which appears as argument number: {idx}")
         PandasDataFrame[[col]] = PandasDataFrame["dataset_id"].apply(lambda x: pd.Series(str(x).split(".")[idx]))
 
     return PandasDataFrame  # this is the dataframe with appended columns that make it easier to sort and cross-check across models and variables
@@ -111,7 +117,7 @@ def check_continuity(DataFrameSubset, run, logger):
         consecutive_test = [True, True]
 
     return counter, single_file, consecutive_test[
-                                 :-1]  # removes the last boolean of consecutive_test because this involves the padded test
+        :-1]  # removes the last boolean of consecutive_test because this involves the padded test
 
 
 def catalog_traverser(logger, CatalogDF, varlist):
@@ -368,7 +374,7 @@ def check_url_validity(iterable):
 def link_traverser(DownloadableDF):
     # now traverse through dataframes named df_downloadable testing links for good connection - Complete - TODO change this to function
 
-    DownloadableDF_tested = DownloadableDF.copy() #make a copy so that original DF being passed does not change in memory. Good for debugging.
+    DownloadableDF_tested = DownloadableDF.copy()  # make a copy so that original DF being passed does not change in memory. Good for debugging.
     ##############
     # First building an iterable to benefit from multiprocessing:
     iterable = []
@@ -400,32 +406,32 @@ def link_traverser(DownloadableDF):
     # collector[file_idx][1 - boolean for the file if any of the links tested is_downloadable]
     ###############################################################
 
-    #reset index of DataFrame
+    # reset index of DataFrame
     DownloadableDF_tested = DownloadableDF_tested.reset_index(inplace=False, drop=False)
 
     state = []  # dummy array to store downloadable tests results - this will become a column in the dataframe
     # in the loop below item = collector[file_idx]
     for item in collector:
-        if item[1][0] == False: #this checks first value in collector[file_idx][1]
+        if item[1][0] == False:  # this checks first value in collector[file_idx][1]
             print(
                 f'File {os.path.basename(item[0][0][2])} not downloadable')  # look above for navigation onto the nested lists
         state.append(item[1][0])
-    #DownloadableDF['state'] = state
-    #appending new column to dataframe
+    # DownloadableDF['state'] = state
+    # appending new column to dataframe
     DownloadableDF_tested['Downloadable'] = None
     for idx, val in enumerate(state):
-        DownloadableDF_tested.loc[idx,'Downloadable'] = val
+        DownloadableDF_tested.loc[idx, 'Downloadable'] = val
 
     local_paths = []  # dummy array to store local paths where results can be saved to - this will become a column in the dataframe
     path_start = 'CMIP6'
     for _ in DownloadableDF_tested['path']:
         pth = Path(path_start, *list(_.parts[3:]))  # build path only with those
         local_paths.append(pth)
-    #appending new column to dataframe
+    # appending new column to dataframe
     DownloadableDF_tested['local_path'] = None
     for idx, val in enumerate(local_paths):
-        DownloadableDF_tested.loc[idx,'local_path'] = val
-    #DownloadableDF['local_path'] = local_paths
+        DownloadableDF_tested.loc[idx, 'local_path'] = val
+    # DownloadableDF['local_path'] = local_paths
 
     return DownloadableDF_tested
 
