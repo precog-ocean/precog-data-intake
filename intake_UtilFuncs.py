@@ -18,10 +18,9 @@ def print_precog_header():
     return None
 
 
-def print_precog_quote():
+def print_precog_footer():
     end_art = AsciiArt.from_image('./misc_images/squid3.png')
     end_art.to_terminal(columns=100)
-    print('You got the data. Now go be amazing!')
     return None
 
 

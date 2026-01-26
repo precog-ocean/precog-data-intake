@@ -333,7 +333,8 @@ if __name__ == "__main__":
         print("Exiting...\n")
 
     ####### MOTIVATIONAL QUOTE #######
-    print_precog_quote()
+    print_precog_footer()
+    print('You got the data. Now go be amazing!')
 
 
 
