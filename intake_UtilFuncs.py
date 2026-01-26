@@ -90,6 +90,12 @@ def check_continuity(DataFrameSubset, run, logger):
     date_strs_start = DataFrameSubset['file_start'].reset_index(drop=True)
     date_strs_end = DataFrameSubset['file_end'].reset_index(drop=True)
 
+    # Complete TODO fix data column so when exporting to spreadsheet all dates for file_start and file_end have the same date format
+    # example of date being saved wrong
+
+    # example of date output
+    # #o2_Omon_CanESM5_piControl_r1i1p1f1_gn_520101-521012.nc'
+    # # 'file_start': Timestamp('5201-01-01 00:00:00'), 'file_end': Timestamp('5210-12-01 00:00:00)'
     # check if both columns have a datatype as 'Timestamp' so that operations can be done on dates, if not convert to Timestamp
     if type(date_strs_start.values[0]) == str:
         date_strs_start = [pd.Timestamp(value) for value in date_strs_start.values]
@@ -179,7 +185,7 @@ def catalog_traverser(logger, CatalogDF, varlist):
 
         if not all(variables_in):
             logger.info(
-                f'The model: {model} does not have variable(s) of interest: test for {varlist} returned {variables_in} \n')
+                f'The model: {model} does not have all variable(s) of interest: test for {varlist} returned {variables_in} \n')
             models_to_discard.append(model)
 
         elif all(variables_in):  # for the models which have all variables of interest
