@@ -1,3 +1,4 @@
+import datetime
 import os
 import pandas as pd
 import time
@@ -7,7 +8,7 @@ from tqdm.auto import tqdm
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from ascii_magic import AsciiArt
-
+import datetime
 
 def print_precog_header():
     for _ in range(0, 2):
@@ -35,11 +36,35 @@ def append_cols(PandasDataFrame):
     return PandasDataFrame  # this is the dataframe with appended columns that make it easier to sort and cross-check across models and variables
 
 
+def patch_date(DataFrameSubset):
+    # get file name to strip dates from
+
+    DataFrameSubset_patched = DataFrameSubset.copy(deep=True)
+
+    for idx in range(0, len(DataFrameSubset_patched['path'])):
+        fname = DataFrameSubset_patched['path'][idx]
+
+        start_dt = fname.name.split('_')[-1].split('.nc')[0].split('-')[0]
+        start_dt_1 = datetime.date(year=int(start_dt[:4]), month=int(start_dt[4:]), day=1)
+        start_dt_1 = pd.Timestamp(start_dt_1)  # ('YYYY-MM-DD HH:MM:SS')
+
+        end_dt = fname.name.split('_')[-1].split('.nc')[0].split('-')[-1]
+        end_dt_1 = datetime.date(year=int(end_dt[:4]), month=int(end_dt[4:]), day=1)
+        end_dt_1 = pd.Timestamp(end_dt_1)  # ('YYYY-MM-DD HH:MM:SS')
+
+        if DataFrameSubset_patched.loc[idx, 'file_start'] == None:
+            DataFrameSubset_patched.loc[idx, 'file_start'] = start_dt_1
+
+        if DataFrameSubset_patched.loc[idx, 'file_end'] == None:
+            DataFrameSubset_patched.loc[idx, 'file_end'] = end_dt_1
+
+    print(DataFrameSubset_patched)
+
+    return DataFrameSubset_patched
+
 def check_var_in(ConcatDF, varlist):
     catch_state = []
-
     for var in varlist:
-
         df1_subset_var = ConcatDF.loc[ConcatDF['variable_id'] == var]  # subsetting for a single variable
 
         if len(df1_subset_var) == 0:  # in case any catalogue entries do not have results for the variable, then move on to the next model
@@ -54,9 +79,23 @@ def check_continuity(DataFrameSubset, run, logger):
     DataFrameSubset = DataFrameSubset.sort_values(by=['file_start']).reset_index(drop=True)
     var = DataFrameSubset['variable_id'].unique().tolist()
     model = DataFrameSubset['source_id'].unique().tolist()
+
+    #some fetched dates are returning 'None' for file_start and file_end columns.
+    #So it needs to be built and patched manually. Example is model ['SAM0-UNICON']
+    if None in DataFrameSubset['file_start'].unique() or None in DataFrameSubset['file_end'].unique():
+        print('Date patching needed. Function to correct date formats triggered.')
+        DataFrameSubset = patch_date(DataFrameSubset)
+
+
     date_strs_start = DataFrameSubset['file_start'].reset_index(drop=True)
     date_strs_end = DataFrameSubset['file_end'].reset_index(drop=True)
 
+    # Complete TODO fix data column so when exporting to spreadsheet all dates for file_start and file_end have the same date format
+    # example of date being saved wrong
+
+    # example of date output
+    # #o2_Omon_CanESM5_piControl_r1i1p1f1_gn_520101-521012.nc'
+    # # 'file_start': Timestamp('5201-01-01 00:00:00'), 'file_end': Timestamp('5210-12-01 00:00:00)'
     # check if both columns have a datatype as 'Timestamp' so that operations can be done on dates, if not convert to Timestamp
     if type(date_strs_start.values[0]) == str:
         date_strs_start = [pd.Timestamp(value) for value in date_strs_start.values]
@@ -69,6 +108,7 @@ def check_continuity(DataFrameSubset, run, logger):
 
     gaps_within = [j.date().year - i.date().year for i, j in
                    zip(date_strs_start, date_strs_end)]  # #the year gap within each nc file
+
 
     if len(DataFrameSubset) != 1:  # if there's more than one nc file
         single_file = False
@@ -121,6 +161,10 @@ def check_continuity(DataFrameSubset, run, logger):
 
 
 def catalog_traverser(logger, CatalogDF, varlist):
+
+    if type(varlist) == type('str'): #if evaluates to a single variable passed as a string (i.e., not a list of strings)
+        varlist = [varlist] #then force it to be a list
+
     models = CatalogDF['source_id'].unique().tolist()
     models_to_discard = []  # incomplete models (either lack pi or historical)
     model_DF_test_grids_concatenated = pd.DataFrame(
@@ -141,7 +185,7 @@ def catalog_traverser(logger, CatalogDF, varlist):
 
         if not all(variables_in):
             logger.info(
-                f'The model: {model} does not have all variables of interest: test for {varlist} returned {variables_in} \n')
+                f'The model: {model} does not have all variable(s) of interest: test for {varlist} returned {variables_in} \n')
             models_to_discard.append(model)
 
         elif all(variables_in):  # for the models which have all variables of interest
@@ -204,9 +248,15 @@ def catalog_traverser(logger, CatalogDF, varlist):
                         logger.info(f'Found both piControl and Historical runs for model {model} for variable {var}')
                         # check if only one variant and that the variant matches across piControl and Historical
 
-                        if df1_pi['variant_label'].unique() == df1_historical['variant_label'].unique():
+                        #if more than one variant passed, then grab simplest and check if also present in historical. Drop other variants
+                        variant_in_common = set(df1_pi['variant_label'].unique()).intersection(df1_historical['variant_label'].unique())
+                        #now dropping whatever variant is not captured by intersection
+                        df1_pi = df1_pi[df1_pi['variant_label'].isin(list(variant_in_common))]
+                        df1_historical = df1_historical[df1_historical['variant_label'].isin(list(variant_in_common))]
+
+                        if variant_in_common:
                             logger.info(
-                                f'Variant labels {df1_pi['variant_label'].unique()} from piCrontrol and Historical in model {model} are matching')
+                                f'Variant labels {variant_in_common} from piCrontrol and Historical in model {model} are matching')
 
                             # check piControl and Historical continuity in dates for each variable
                             # Complete TODO check continuity piControl pass to function
@@ -244,7 +294,7 @@ def catalog_traverser(logger, CatalogDF, varlist):
             else:
                 logger.info('\n')
                 logger.info(
-                    f'No complete set of variables for model {model} for variable {var} in either grid. Test returned:')
+                    f'No complete set of variables for model {model} for variable {varlist} in either grid. Test returned:')
                 string_pretty = ''.join(['#'] * 100)
                 logger.info(string_pretty)
                 [logger.info(_) for _ in model_DF_test_grids.to_string(index=False).split('\n')]
@@ -282,7 +332,7 @@ def check_grid_avail(DataFrameSubsetModel, varlist, grid_labels, run, logger):
 
         if vart_test_ordered == varlist_ordered:  # test if model has a grid output across all variables of interest
             logger.info(
-                f'Model {model} has all outputs for variables {varlist_ordered} in a {grid} grid for the {run} run')
+                f'Model {model} has the output(s) for variable(s) {varlist_ordered} in a {grid} grid for the {run} run')
 
             catch_state = True
             var_test_final = [i == j for i, j in zip(varlist_ordered, vart_test_ordered)]
@@ -290,9 +340,9 @@ def check_grid_avail(DataFrameSubsetModel, varlist, grid_labels, run, logger):
         else:
             missing_var = varlist_ordered - vart_test_ordered
             logger.info(
-                f'Model {model} does not have all outputs for variables {varlist} in a {grid} grid for the {run} run')
-            logger.info(f'Test returned the following vars only {vart_test_ordered}')
-            logger.info(f'Variable {missing_var} is missing. Ignoring model outputs for grid {grid}.\n')
+                f'Model {model} does not have output(s) for variable(s) {varlist} in a {grid} grid for the {run} run')
+            logger.info(f'Test returned the following var(s) only {vart_test_ordered}')
+            logger.info(f'Variable {missing_var} is missing. Ignoring model output for grid {grid}.\n')
 
             # padding for comparission between lists
             # make a list first
