@@ -170,7 +170,7 @@ if combine.lower().strip(" ") in ['y', 'yes']:
     print(f'Traversing urls to test server responses for combined vars {chosen_vars}')
     df_downloadable_tested = link_traverser(df_downloadable)
     save_searched_tests(df_downloadable_tested=df_downloadable_tested, downloadpath=download_path)
-
+    print(f'Traversing complete for vars {chosen_vars}\n')
 
 else:
     #then just pass single var to catalogue traverser function #TODO fix this to do individual testing
@@ -201,6 +201,7 @@ else:
         print(f'Traversing urls to test server responses for var {chosen_vars}')
         df_downloadable_tested = link_traverser(df_downloadable)
         save_searched_tests(df_downloadable_tested=df_downloadable_tested, downloadpath=download_path)
+        print(f'Traversing complete for var {chosen_vars}\n')
 
 # #### SANITY CHECK #####
 # First just checking if filtered full-search result and downloadable are same size when excluding odd-cases for when grid availability is missing:
@@ -213,7 +214,7 @@ else:
 ############
 # Motivational quote
 print_precog_footer()
-print(f'Data sweep complete. Dataframes should have been saved at {download_path}')
+print(f'Data sweep complete.\nDataframes should have been saved at {download_path}')
 print(f'Now giddy up and run "~/intake_OceanVarsDL.py" to download the data.')
 
 ########### NEXT STEPS ####################
