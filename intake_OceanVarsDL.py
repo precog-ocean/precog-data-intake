@@ -180,7 +180,7 @@ if __name__=="__main__":
             iterable_dwnld.append(
                 (df_single, download_path))  # this is the iterable being passed to the download function with 2 args
 
-        iterable_dwnld = iterable_dwnld[0:4]  # this is for testing. #TODO delete this line in the future
+        #iterable_dwnld = iterable_dwnld[0:4]  # this is for testing. #TODO delete this line in the future
 
         with  ThreadPool(min(32, os.cpu_count() + 4)) as pool:
             pool.starmap(download_files, iterable_dwnld) #starmap unpacks the iterable args to function
