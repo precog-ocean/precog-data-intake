@@ -4,7 +4,6 @@ and Historical run alignment and shortlists for cases where both PI and Historic
 direct carbon export outputs (expc and epc100) or auxiliary vars (thetao, o2 and so).
 
 """
-import sys
 import intake_esgf
 from intake_UtilFuncs import *
 from intake_esgf_mods.catalog import ESGFCatalog
@@ -13,6 +12,8 @@ import pandas as pd
 pd.set_option('display.width', 2000)  # pretty printing to console
 pd.set_option('display.max_columns', None)  # pretty printing to console
 from pathlib import Path
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__name__)))
 
 
 print_precog_header()
@@ -41,7 +42,7 @@ intake_esgf.conf.set(all_indices=True,
                      local_cache=download_path,
                      confirm_download=True)
 
-print("Printing config. set up for the upcoming ESGF search ...")
+print("Printing config. set up for the upcoming ESGF search ...\n")
 print("###########")
 print(intake_esgf.conf)
 print("###########")
@@ -73,7 +74,7 @@ for key, value in DefaultSearchParam.items():
 print("###########")
 
 # user prompt for cell measures
-var = input("Please enter a list of strings for variable_id. E.g. ['expc'] or multiple ['expc', 'o2', 'thetao', 'so', 'epc100']:")
+var = input("Please enter a list of strings for variable_id. E.g. ['expc'] or multiple ['expc', 'o2', 'thetao', 'so', 'epc100']:\n")
 var = var.strip(" ")
 print(f"User entered variable_ids: {var}")
 variable_ids = eval(var)

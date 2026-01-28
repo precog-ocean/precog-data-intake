@@ -8,13 +8,12 @@ Modify line 190 for the full sweep and download.
 
 
 import ast
-from tqdm.auto import tqdm
 from intake_UtilFuncs import *
-import tqdm as tqdm2
 from multiprocessing.pool import ThreadPool
 import hashlib
 from pathlib import Path
-from ascii_magic import AsciiArt
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__name__)))
 
 def verify_hash(downloaded_file, expected_hash):
     # Calculate the hash of the downloaded file.

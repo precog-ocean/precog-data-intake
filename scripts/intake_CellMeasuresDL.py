@@ -7,7 +7,6 @@ shortlisted models in the Catalogue Dataframes
 from multiprocessing.pool import ThreadPool
 import numpy as np
 import intake_esgf
-import pandas as pd
 import tqdm
 from intake_UtilFuncs import *
 from intake_esgf_mods.catalog import ESGFCatalog
@@ -16,6 +15,8 @@ pd.set_option('display.max_columns', None)  # pretty printing to console
 import datetime
 from intake_OceanVarsDL import download_files
 from pathlib import Path
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__name__)))
 
 def import_ocean_var_dataframes():
     DL_ocean_var_path = input("Indicate path where dataframes 'DF_Downloadbale_XXX.xlsx' for ocean variables 'XXX' are saved:\n")
