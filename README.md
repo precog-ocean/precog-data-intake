@@ -1,6 +1,6 @@
 # precog-data-intake 🦑
 
-Data sweep and scraping utilities for downloading and organizing Earth system data from Earth System Grid Federation (ESGF) nodes based on core functionality from [esgf-intake](https://intake-esgf.readthedocs.io/en/latest/)
+Data sweep and scraping utilities for downloading and organizing Earth system data from Earth System Grid Federation ([ESGF](https://esgf-ui.ceda.ac.uk/search)) nodes based on core functionality from [esgf-intake](https://intake-esgf.readthedocs.io/en/latest/)
 
 ## Overview
 
@@ -10,7 +10,12 @@ It is designed to support climate and oceanographic analyses that require consis
 ## Features
 
 - Automated search through the ESGF catalogue using project, variable, experiment, and temporal filters.
-- Verification of continuity in CMIP6 Pre-Industrial and Historical runs
+- Verification of continuity of date stamps in CMIP6 Pre-Industrial (PI) and Historical runs
+- Verification and logging of availability of (PI) and Historical runs on consistent grids (e.g., 'gr' and 'gn'). 
+- Export of simple Dataframes for realized ESGF catalogue searches
+- Verification of server responses and flagging shortlisted ESM outputs as 'Downloadable'.
+- Combined conditional search for availability of PI and Historical runs in CMIP6 models across >1 variable (e.g., 'expc' & 'epc100').
+- Parallelized URL checking for fastest connection in case same data are available across different nodes.
 - Batched download of files from multiple ESGF nodes with retry and integrity checks.
 - Local directory layout optimized for downstream analysis tools.
 - Batched search and download of grid cell measures (e.g., 'areacello' and 'volcello') with archive snapshot of relaxed regex matches for CMIP6 models of interest.
@@ -30,7 +35,7 @@ cd precog-data-intake
 python3.12 -m venv .venv
 ````
 Make sure your python version is >3.12.
-the '.venv' means a virtual environment called 'venv' will be created with its dependencies put in a hidden system folder called '.venv' under the project directory you are in (i.e., ~/precog-data-intake)
+the '.venv' means a virtual environment called 'venv' will be created with its dependencies put in a hidden system folder called `'.venv'` under the project directory you are in (i.e., `~/precog-data-intake/.venv`)
 
 ### 3. Activate it
 ```bash
