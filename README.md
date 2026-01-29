@@ -1,6 +1,6 @@
 # precog-data-intake 🦑
 
-Data sweep and scraping utilities for downloading and organizing Earth system data from Earth System Grid Federation ([ESGF](https://esgf-ui.ceda.ac.uk/search)) nodes based on core functionality from [esgf-intake](https://intake-esgf.readthedocs.io/en/latest/)
+Data sweep and scraping utilities for downloading and organizing Earth system data from the [Earth System Grid Federation](https://esgf-ui.ceda.ac.uk/search)) nodes based on core functionality from [esgf-intake](https://intake-esgf.readthedocs.io/en/latest/)
 
 ## Overview
 
@@ -27,23 +27,23 @@ These instructions assume you have **Python 3.12+** installed and available as `
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/LeoBertini/precog-data-intake.git
+git clone https://github.com/precog-ocean/precog-data-intake.git
 cd precog-data-intake
 ````
-### 2. Create a virtual environment (named .venv)
+### 2. Create a virtual environment (named `venv`)
 ```bash
 python3 -m venv .venv
 ````
 Make sure your python version is >3.12.
 You can check which python you have installed on your machine by typing `python` followed by `TAB` a few times. It will list your python versions.
 
-The argument '.venv' means a hidden directory called `'.venv'` under the project directory you are in (i.e., `~/precog-data-intake/.venv`). This is where the virtual environment called 'venv' will be created with its dependencies put in the `/.venv` directory. 
+The argument `.venv` means a hidden directory will be created under the project directory you are in, where python and its dependencies will be installed (i.e., `~/precog-data-intake/.venv`). 
 
 ### 3. Activate it
 ```bash
 source .venv/bin/activate
 ```
-When activation succeeds, your shell prompt will usually show the environment name in parentheses, for example: `(.venv) ...`
+When activation succeeds, your shell prompt will usually show the environment name in parentheses, for example `(.venv)...`
 
 ### 4. Upgrade pip (recommended)
 Inside the activated virtual environment, upgrade `pip`:
@@ -55,39 +55,23 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Repository structure
-```                
-
-precog-data-intake/
-├─.venv/                 # Hidden folder with virtual enviroment dependencies               
-├─ intake_esgf_mods/     # Modified Python modules from the main package "esgf-intake"
-├─ misc_images/          # Images (these are renderered as ASCII art headers and footers in the CLI)
-├─ scripts/              # Workflows as command line scripts
-├─ notebooks/            # Example notebooks of usage
-└─ tests/                # Basic tests for core functionality
-```
-
-## Usage
+## Checking installation
 
 Make sure that you have activated the python virtual environment. Then run:
 
 ```bash 
-python3 tests/test_install_hearder.py
+python3 tests/test_install.py
 ```
-If you see the following being printed on the terminal, you have installed things correctly.
+If you see the PREGOC logo followed by Hellen, the vampire squid from hell, being printed on the terminal as shown in the example below, then you probably installed things correctly.
+![image](misc_images/test_install_screenshot.png)
 
-```bash
-
-         5PO8$HHDBWWWWBBHK@UOPp                                                                                         
-     !P&KWN0QQQQQQQ000QQQQQQ0NWHUGn                                                                                     
-   FAHMQQQ0000000000000RR00000QQQ0D&g                                                                                   
- IbBQQ00000000000000Q0000R00000QXPAUY4gg4SShc  '2SVgggg4SSh%  ;pSdgggggggg>  +mS4ggggggu   7ghggggggSg7   Lghggggggggt  
-jAQQR0000000000000Q0000RRR00000HnMQPezjz3QQN/  aQQG77zz3QQW+  jQQEo77777jj,  TQQELLLLLLx  <BQNnLLLnNQQI  %MQDuLj7777j>  
-EQ0RRR0RRMNMMRRRRR00Q0Q000000RQ2ZQQ4T#ywEQQj  ,OQQVTJyJ4QQz  +$QQST#CCCCv   \HQD^         FQQj    *0Q4   gQQ1  "Lzzj)   
-XWDDDHDBDWWNWBWBBDHKHDDDBHDDDWkJQQV}?1[1I*{-  TQQh}?!7QQW?-  fQQF{*}***}=   5QQj         lRQA`   ,OQR)  I0QZ   )aQQQ>   
-fGK@KgEHdOK@K4GK@KkpV@$$Uq8@U$TORD| 1Fmw     |$0D/   |N0@_  )H00dppmmmmF+  xW0RVqhGPGz  -SQ0AmqPPXQ0F  _E00kmqGX400w    
-IpgVqd44dd44ddd4d6qd44hmhd44gge*cv,|h4qC     =v)|    ;v><.  /v))%xx%xx%v.  "v))%x%%%%^  -v)>vxx%%%))'  'v))vxx%%%)>_    
- lLwy3yyJyyy#CyyywfyyyywfyyyyJyCJ#C3y#?                                                                                 
-   t7jn#nTTnTnnnLTnLunnnjunnnnT#JTLje                                                                                   
-     )zLLunTT#nTTTnnnTTTunT#TunuLL7                                                                                     
-         ejojzLununnnnuuuuuLozz```
+## Repository structure
+```                
+precog-data-intake/
+├─.venv/                 # Hidden folder with virtual enviroment dependencies               
+├─ intake_esgf_mods/     # Modified Python modules from the main package "esgf-intake"
+├─ misc_images/          # Images (these are renderered as ASCII art headers and footers in the CLI)
+├─ scripts/              # Main workflows to be run as command line scripts (see notebooks for examples)
+├─ notebooks/            # Example notebooks of usage
+└─ tests/                # Basic tests for core functionality
+```

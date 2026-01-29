@@ -9,19 +9,22 @@ from pathlib import Path
 from ascii_magic import AsciiArt
 import datetime
 import sys
+
 sys.path.append(os.path.dirname(os.path.abspath(__name__)))
 
+
 def print_precog_header():
-    for _ in range(0, 2):
-        print('\n')
+    print("\n" * 2)
     my_art = AsciiArt.from_image('./misc_images/precog_logo_full.png')  # path to logo image
     my_art.to_terminal(width_ratio=3)
+    print("\n" * 2)
     return None
 
 
 def print_precog_footer():
     end_art = AsciiArt.from_image('./misc_images/squid2.png')
-    end_art.to_terminal(columns=100)
+    end_art.to_terminal(columns=120, width_ratio=2.5)
+    print("\n" * 2)
     return None
 
 
@@ -62,6 +65,7 @@ def patch_date(DataFrameSubset):
 
     return DataFrameSubset_patched
 
+
 def check_var_in(ConcatDF, varlist):
     catch_state = []
     for var in varlist:
@@ -80,12 +84,11 @@ def check_continuity(DataFrameSubset, run, logger):
     var = DataFrameSubset['variable_id'].unique().tolist()
     model = DataFrameSubset['source_id'].unique().tolist()
 
-    #some fetched dates are returning 'None' for file_start and file_end columns.
-    #So it needs to be built and patched manually. Example is model ['SAM0-UNICON']
+    # some fetched dates are returning 'None' for file_start and file_end columns.
+    # So it needs to be built and patched manually. Example is model ['SAM0-UNICON']
     if None in DataFrameSubset['file_start'].unique() or None in DataFrameSubset['file_end'].unique():
         print('Date patching needed. Function to correct date formats triggered.')
         DataFrameSubset = patch_date(DataFrameSubset)
-
 
     date_strs_start = DataFrameSubset['file_start'].reset_index(drop=True)
     date_strs_end = DataFrameSubset['file_end'].reset_index(drop=True)
@@ -108,7 +111,6 @@ def check_continuity(DataFrameSubset, run, logger):
 
     gaps_within = [j.date().year - i.date().year for i, j in
                    zip(date_strs_start, date_strs_end)]  # #the year gap within each nc file
-
 
     if len(DataFrameSubset) != 1:  # if there's more than one nc file
         single_file = False
@@ -161,9 +163,9 @@ def check_continuity(DataFrameSubset, run, logger):
 
 
 def catalog_traverser(logger, CatalogDF, varlist):
-
-    if type(varlist) == type('str'): #if evaluates to a single variable passed as a string (i.e., not a list of strings)
-        varlist = [varlist] #then force it to be a list
+    if type(varlist) == type(
+            'str'):  # if evaluates to a single variable passed as a string (i.e., not a list of strings)
+        varlist = [varlist]  # then force it to be a list
 
     models = CatalogDF['source_id'].unique().tolist()
     models_to_discard = []  # incomplete models (either lack pi or historical)
@@ -248,9 +250,10 @@ def catalog_traverser(logger, CatalogDF, varlist):
                         logger.info(f'Found both piControl and Historical runs for model {model} for variable {var}')
                         # check if only one variant and that the variant matches across piControl and Historical
 
-                        #if more than one variant passed, then grab simplest and check if also present in historical. Drop other variants
-                        variant_in_common = set(df1_pi['variant_label'].unique()).intersection(df1_historical['variant_label'].unique())
-                        #now dropping whatever variant is not captured by intersection
+                        # if more than one variant passed, then grab simplest and check if also present in historical. Drop other variants
+                        variant_in_common = set(df1_pi['variant_label'].unique()).intersection(
+                            df1_historical['variant_label'].unique())
+                        # now dropping whatever variant is not captured by intersection
                         df1_pi = df1_pi[df1_pi['variant_label'].isin(list(variant_in_common))]
                         df1_historical = df1_historical[df1_historical['variant_label'].isin(list(variant_in_common))]
 
