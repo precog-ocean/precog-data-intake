@@ -1,6 +1,6 @@
 # precog-data-intake 🦑
 
-Data sweep and scraping utilities for downloading and organizing Earth system data from Earth System Grid Federation ([ESGF](https://esgf-ui.ceda.ac.uk/search)) nodes based on core functionality from [esgf-intake](https://intake-esgf.readthedocs.io/en/latest/)
+Data sweep and scraping utilities for downloading and organizing Earth system data from the [Earth System Grid Federation](https://esgf-ui.ceda.ac.uk/search)) nodes based on core functionality from [esgf-intake](https://intake-esgf.readthedocs.io/en/latest/)
 
 ## Overview
 
@@ -30,20 +30,20 @@ These instructions assume you have **Python 3.12+** installed and available as `
 git clone https://github.com/precog-ocean/precog-data-intake.git
 cd precog-data-intake
 ````
-### 2. Create a virtual environment (named .venv)
+### 2. Create a virtual environment (named `venv`)
 ```bash
 python3 -m venv .venv
 ````
 Make sure your python version is >3.12.
 You can check which python you have installed on your machine by typing `python` followed by `TAB` a few times. It will list your python versions.
 
-The argument '.venv' means a hidden directory called `'.venv'` under the project directory you are in (i.e., `~/precog-data-intake/.venv`). This is where the virtual environment called 'venv' will be created with its dependencies put in the `/.venv` directory. 
+The argument `.venv` means a hidden directory will be created under the project directory you are in, where python and its dependencies will be installed (i.e., `~/precog-data-intake/.venv`). 
 
 ### 3. Activate it
 ```bash
 source .venv/bin/activate
 ```
-When activation succeeds, your shell prompt will usually show the environment name in parentheses, for example: `(.venv) ...`
+When activation succeeds, your shell prompt will usually show the environment name in parentheses, for example `(.venv)...`
 
 ### 4. Upgrade pip (recommended)
 Inside the activated virtual environment, upgrade `pip`:
