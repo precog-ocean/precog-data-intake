@@ -4,16 +4,18 @@ and Historical run alignment and shortlists for cases where both PI and Historic
 direct carbon export outputs (expc and epc100) or auxiliary vars (thetao, o2 and so).
 
 """
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__name__)))
 import intake_esgf
-from intake_UtilFuncs import *
+from scripts.intake_UtilFuncs import *
 from intake_esgf_mods.catalog import ESGFCatalog
 import datetime
 import pandas as pd
 pd.set_option('display.width', 2000)  # pretty printing to console
 pd.set_option('display.max_columns', None)  # pretty printing to console
 from pathlib import Path
-import sys
-sys.path.append(os.path.dirname(os.path.abspath(__name__)))
+
 
 
 print_precog_header()
@@ -80,7 +82,12 @@ print(f"User entered variable_ids: {var}")
 variable_ids = eval(var)
 
 experiments_must_haves = ['piControl', 'historical'] # must have PI and historical in the search.
-variables_of_interest = ['expc', 'o2', 'thetao', 'so', 'epc100'] # default hard-backed list of variables of interest
+
+root_proj = os.path.dirname(os.path.abspath(__name__))
+std_names = import_ocean_std_names(root_proj)
+
+#variables_of_interest = ['expc', 'o2', 'thetao', 'so', 'epc100', 'intdic', 'intpoc'] # default hard-backed list of variables of interest # Complete-TODO assimilate a list of all possible varnames that are valid
+variables_of_interest = std_names
 DicDataframeSearches = {'variable_names': [], 'search_results':[]} #initialising empty dic to facilitate saving data
 
 for oceanvar in variable_ids:
