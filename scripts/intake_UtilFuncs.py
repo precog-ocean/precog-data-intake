@@ -495,3 +495,12 @@ def save_searched_tests(df_downloadable_tested, downloadpath):
     fname = os.path.join(downloadpath, 'DF_Downloadable_' + df_name)
     with pd.ExcelWriter(fname + '.xlsx', engine='openpyxl') as writer:
         df_downloadable_tested.to_excel(writer)
+
+
+def import_ocean_std_names(root_proj):
+    for root, dirs, files in os.walk(root_proj):
+        for name in files:
+            if 'CMIP6_OceanVarNames.xlsx' in name:
+                std_file_DF = pd.read_excel(os.path.join(root, name))
+                std_names = std_file_DF['Variable Name'].to_list()
+    return std_names
