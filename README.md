@@ -75,3 +75,14 @@ precog-data-intake/
 ├─ notebooks/            # Example notebooks of usage
 └─ tests/                # Basic tests for core functionality
 ```
+
+## Workflow
+
+A Jupyter notebook [Workflow_Example_POCflux.ipynb](Workflow_Example_POCflux.ipynb) is provided, which demonstrates how to find amongst CMIP6 models those that contain both PI and Historical outputs for:
+
+```
+ 'epc100' : Downward Flux of Particulate Organic Carbon at 100m depth [mol m-2 s-1]
+ 'expc' :   Downward Flux of Particulate Organic Carbon fully-resolved at depth [mol m-2 s-1]
+```
+
+This self-guided notebook also shows you how to automatically fetch corresponding ocean grid cell measure variables ```areacello``` and ```volcello``` for the selected models.
