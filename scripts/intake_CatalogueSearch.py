@@ -23,8 +23,7 @@ print_precog_header()
 today = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")  # get today's flag and hour stamp for saving unique files later on
 
 ### Defining paths
-download_path = input(
-    "Define the download path. Either type path or drag desired download parent folder onto this terminal window:")
+download_path = input("Define the download path. Either type path or drag desired download parent folder onto this terminal window:")
 download_path = Path(download_path.strip(" "))  # strip added as dragging onto terminal adds a trailing 'space'
 
 if os.path.isdir(download_path) == False:
