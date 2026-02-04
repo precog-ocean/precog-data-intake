@@ -347,6 +347,7 @@ if __name__ == "__main__":
 
     ####### MOTIVATIONAL QUOTE #######
     print_precog_footer()
+    print(f'Grid cell measures should have been saved at {os.path.join(download_path, 'CMIP6')}')
     print('You got the data. Now go be amazing!')
 
 
