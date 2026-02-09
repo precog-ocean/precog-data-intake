@@ -45,7 +45,9 @@ def patch_date(DataFrameSubset):
     DataFrameSubset_patched = DataFrameSubset.copy(deep=True)
 
     for idx in range(0, len(DataFrameSubset_patched['path'])):
+        # intentionally ensure this is a Path data type otherwise it clunks sometimes and tries to convert to string unintentionally.
         fname = DataFrameSubset_patched['path'][idx]
+        fname = Path(fname)
 
         start_dt = fname.name.split('_')[-1].split('.nc')[0].split('-')[0]
         start_dt_1 = datetime.date(year=int(start_dt[:4]), month=int(start_dt[4:]), day=1)
@@ -60,8 +62,6 @@ def patch_date(DataFrameSubset):
 
         if DataFrameSubset_patched.loc[idx, 'file_end'] == None:
             DataFrameSubset_patched.loc[idx, 'file_end'] = end_dt_1
-
-    print(DataFrameSubset_patched)
 
     return DataFrameSubset_patched
 
@@ -158,8 +158,7 @@ def check_continuity(DataFrameSubset, run, logger):
         counter = 1
         consecutive_test = [True, True]
 
-    return counter, single_file, consecutive_test[
-        :-1]  # removes the last boolean of consecutive_test because this involves the padded test
+    return counter, single_file, consecutive_test[:-1]  # removes the last boolean of consecutive_test because this involves the padded test
 
 
 def catalog_traverser(logger, CatalogDF, varlist):
@@ -182,8 +181,7 @@ def catalog_traverser(logger, CatalogDF, varlist):
 
         # TODO make sure each dataframe is continuous with respect to picontrol and historical runs across all variables
 
-        variables_in = check_var_in(df1_subset,
-                                    varlist)  # checks if any of the variables returns an empty dataframe, if they all return entries then proceed
+        variables_in = check_var_in(df1_subset, varlist)  # checks if any of the variables returns an empty dataframe, if they all return entries then proceed
 
         if not all(variables_in):
             logger.info(
@@ -347,7 +345,7 @@ def check_grid_avail(DataFrameSubsetModel, varlist, grid_labels, run, logger):
             logger.info(f'Test returned the following var(s) only {vart_test_ordered}')
             logger.info(f'Variable {missing_var} is missing. Ignoring model output for grid {grid}.\n')
 
-            # padding for comparission between lists
+            # padding for comparison between lists
             # make a list first
             vart_test_ordered = list(vart_test_ordered)
             varlist_ordered = list(varlist_ordered)
