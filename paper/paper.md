@@ -25,7 +25,7 @@ bibliography: paper.bib
 # Summary
 
 # Statement of need
-
+Testing citation [@Pearson:2017]
 # Acknowledgements
 
 # Mathematics
