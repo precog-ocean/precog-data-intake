@@ -33,21 +33,6 @@ bibliography: paper.bib
 # ----------'"++'"----------
 # Mathematics
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
-
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
-
 # Citations
 
 Citations to entries in paper.bib should be in
@@ -66,17 +51,12 @@ For a quick reference, the following citation commands can be used:
 
 Figures can be included like this:
 
-![Caption for example figure \fig:example](./misc_images/squid.png){height="9pt"}
+![Caption for example figure \fig:example](../misc_images/squid.png)
 
 and referenced from text using \autoref{fig:example}.
 
 Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](){width=20%}
 
-# AI usage disclosure
-
-No generative AI tools were used in the development of this software, the writing
-of this manuscript, or the preparation of supporting materials.
 
 
 
