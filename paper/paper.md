@@ -68,12 +68,12 @@ For a quick reference, the following citation commands can be used:
 
 Figures can be included like this:
 
-![Caption for example figure \fig:example](/misc_images/squid.png){height="9pt"}
+![Caption for example figure \fig:example](./misc_images/squid.png){height="9pt"}
 
 and referenced from text using \autoref{fig:example}.
 
 Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](/misc_images/squid.png){width=20%}
+![Caption for example figure.](){width=20%}
 
 # AI usage disclosure
 
