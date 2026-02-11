@@ -26,6 +26,11 @@ bibliography: paper.bib
 
 # Statement of need
 Testing citation [@Pearson:2017]
+
+Testing image display
+
+![This is a figure](../misc_images/squid.png){height="9pt"}
+
 # Acknowledgements
 
 # Mathematics
