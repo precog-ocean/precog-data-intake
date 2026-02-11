@@ -22,7 +22,6 @@ date: 11 Feb 2026
 bibliography: paper.bib
 ---
 
-
 # Summary
 
 # Statement of need
