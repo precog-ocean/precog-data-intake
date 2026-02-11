@@ -19,7 +19,7 @@ affiliations:
   - name: Department of Earth, Ocean and Ecological Sciences, University of Liverpool, UK
     index: 1
 date: 11 Feb 2026
-bibliography: paper_example.bib
+bibliography: paper.bib
 ---
 
 
