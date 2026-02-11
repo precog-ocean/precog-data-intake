@@ -15,7 +15,6 @@ authors:
   - name: Sam Ditkovsky
     orcid: 
     affiliation: "1"
-    
 affiliations:
   - name: Department of Earth, Ocean and Ecological Sciences, University of Liverpool, UK
     index: 1
