@@ -28,9 +28,7 @@ bibliography: paper.bib
 
 # Acknowledgements
 
-# References
-
 # Mathematics
 
-# Citations
+# References
 
