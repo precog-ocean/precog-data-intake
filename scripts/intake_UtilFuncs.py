@@ -346,8 +346,8 @@ def check_grid_avail(DataFrameSubsetModel, varlist, grid_labels, run, logger):
             logger.info(f'Variable {missing_var} is missing. Ignoring model output for grid {grid}.\n')
 
             # padding for comparison between lists
-            vart_test_mod = list(vart_test_mod) # turn it back to a list
-            varlist_mod = list(varlist_mod)
+            vart_test_mod = sorted(list(vart_test_mod)) # turn it back to a list
+            varlist_mod = sorted(list(varlist_mod))
 
             string_flag = '!' #append symbol next to var to indicate absence
             for missing in missing_var:
@@ -366,9 +366,6 @@ def check_grid_avail(DataFrameSubsetModel, varlist, grid_labels, run, logger):
         dict['grid_label'].append(grid)
 
     return dict
-
-    # some initial parameters to be set so that the each happens across all nodes and the cached files can be downloaded to a custom directory
-
 
 def instantiate_logging_file(logfilename, logger_name):
     formatter_line_style = '%(asctime)s - %(levelname)s - %(message)s'
