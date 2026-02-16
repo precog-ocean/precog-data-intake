@@ -11,14 +11,14 @@ It is designed to support climate and oceanographic analyses that require consis
 
 - Automated search through the ESGF catalogue using project, variable, experiment, and temporal filters.
 - Verification of continuity of date stamps in CMIP6 Pre-Industrial (PI) and Historical runs.
-- Verification and logging of availability of (PI) and Historical runs on consistent grids (e.g., 'gr' and 'gn'). 
+- Verification and logging of availability of (PI) and Historical runs on consistent grids (e.g., regular grid `gr` and native grid `gn`). 
 - Export of simple Dataframes for realized ESGF catalogue searches.
 - Verification of server responses and flagging shortlisted ESM outputs as 'Downloadable'.
-- Combined conditional search for availability of PI and Historical runs in CMIP6 models across >1 variable (e.g., 'expc' & 'epc100').
+- Combined conditional search for availability of PI and Historical runs in CMIP6 models across >1 variable (e.g., `expc` & `epc100`).
 - Parallelized URL checking for fastest connection in case same data are available across different nodes.
 - Batched download of files from multiple ESGF nodes with retry and integrity checks.
 - Local directory layout optimized for downstream analysis tools.
-- Batched search and download of grid cell measures (e.g., 'areacello' and 'volcello') with archive snapshot of relaxed regex matches for CMIP6 models of interest.
+- Batched search and download of grid cell measures (e.g., `areacello` and `volcello`) with archive snapshot of relaxed regex matches for CMIP6 models of interest.
 
 ## Installation
 

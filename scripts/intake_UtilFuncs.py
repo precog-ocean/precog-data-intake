@@ -45,7 +45,9 @@ def patch_date(DataFrameSubset):
     DataFrameSubset_patched = DataFrameSubset.copy(deep=True)
 
     for idx in range(0, len(DataFrameSubset_patched['path'])):
+        # intentionally ensure this is a Path data type otherwise it clunks sometimes and tries to convert to string unintentionally.
         fname = DataFrameSubset_patched['path'][idx]
+        fname = Path(fname)
 
         start_dt = fname.name.split('_')[-1].split('.nc')[0].split('-')[0]
         start_dt_1 = datetime.date(year=int(start_dt[:4]), month=int(start_dt[4:]), day=1)
@@ -60,8 +62,6 @@ def patch_date(DataFrameSubset):
 
         if DataFrameSubset_patched.loc[idx, 'file_end'] == None:
             DataFrameSubset_patched.loc[idx, 'file_end'] = end_dt_1
-
-    print(DataFrameSubset_patched)
 
     return DataFrameSubset_patched
 
@@ -158,8 +158,7 @@ def check_continuity(DataFrameSubset, run, logger):
         counter = 1
         consecutive_test = [True, True]
 
-    return counter, single_file, consecutive_test[
-        :-1]  # removes the last boolean of consecutive_test because this involves the padded test
+    return counter, single_file, consecutive_test[:-1]  # removes the last boolean of consecutive_test because this involves the padded test
 
 
 def catalog_traverser(logger, CatalogDF, varlist):
@@ -182,8 +181,7 @@ def catalog_traverser(logger, CatalogDF, varlist):
 
         # TODO make sure each dataframe is continuous with respect to picontrol and historical runs across all variables
 
-        variables_in = check_var_in(df1_subset,
-                                    varlist)  # checks if any of the variables returns an empty dataframe, if they all return entries then proceed
+        variables_in = check_var_in(df1_subset, varlist)  # checks if any of the variables returns an empty dataframe, if they all return entries then proceed
 
         if not all(variables_in):
             logger.info(
@@ -330,49 +328,44 @@ def check_grid_avail(DataFrameSubsetModel, varlist, grid_labels, run, logger):
             DataFrameSubsetModel_run['grid_label'] == grid]  # subsetting for a grid type
         # now get list of vars available in that specific grid:
         var_test = list(DataFrameSubsetModel_grid['variable_id'].unique())
-        vart_test_ordered = set(var_test)
-        varlist_ordered = set(varlist)
+        vart_test_mod = set(var_test)
+        varlist_mod = set(varlist)
 
-        if vart_test_ordered == varlist_ordered:  # test if model has a grid output across all variables of interest
+        if vart_test_mod == varlist_mod:  # test if model has a grid output across all variables of interest
             logger.info(
-                f'Model {model} has the output(s) for variable(s) {varlist_ordered} in a {grid} grid for the {run} run')
+                f'Model {model} has the output(s) for variable(s) {varlist_mod} in a {grid} grid for the {run} run')
 
             catch_state = True
-            var_test_final = [i == j for i, j in zip(varlist_ordered, vart_test_ordered)]
+            var_test_final = [i == j for i, j in zip(varlist_mod, vart_test_mod)]
 
         else:
-            missing_var = varlist_ordered - vart_test_ordered
+            missing_var = varlist_mod - vart_test_mod #gets the set difference
             logger.info(
                 f'Model {model} does not have output(s) for variable(s) {varlist} in a {grid} grid for the {run} run')
-            logger.info(f'Test returned the following var(s) only {vart_test_ordered}')
+            logger.info(f'Test returned the following var(s) only {vart_test_mod}')
             logger.info(f'Variable {missing_var} is missing. Ignoring model output for grid {grid}.\n')
 
-            # padding for comparission between lists
-            # make a list first
-            vart_test_ordered = list(vart_test_ordered)
-            varlist_ordered = list(varlist_ordered)
+            # padding for comparison between lists
+            vart_test_mod = sorted(list(vart_test_mod)) # turn it back to a list
+            varlist_mod = sorted(list(varlist_mod))
 
-            string_flag = '!'
+            string_flag = '!' #append symbol next to var to indicate absence
             for missing in missing_var:
-                idx = varlist_ordered.index(missing)
-                vart_test_ordered.insert(idx, missing + string_flag)
+                idx = varlist_mod.index(missing)
+                vart_test_mod.insert(idx, missing + string_flag)
 
             # find indices of missing items and append them to specific positions followed by "!"
-
             catch_state = False
-            var_test_final = [i == j for i, j in zip(varlist_ordered, vart_test_ordered)]
+            var_test_final = [i == j for i, j in zip(varlist_mod, vart_test_mod)]
 
         dict['var_test'].append(var_test_final)
         dict['run'].append(run)
         dict['has_all_variables'].append(catch_state)
         dict['model'].append(model)
-        dict['variable_ids'].append(varlist_ordered)
+        dict['variable_ids'].append(varlist_mod)
         dict['grid_label'].append(grid)
 
     return dict
-
-    # some initial parameters to be set so that the seach happens across all nodes and the cached files can be downloaded to a custom directory
-
 
 def instantiate_logging_file(logfilename, logger_name):
     formatter_line_style = '%(asctime)s - %(levelname)s - %(message)s'
