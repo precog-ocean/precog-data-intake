@@ -33,7 +33,5 @@ Testing image display
 
 # Acknowledgements
 
-# Mathematics
-
 # References
 
