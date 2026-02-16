@@ -200,7 +200,7 @@ def test_check_grid_avail():
     DataFrameSubsetModel = pd.read_excel(os.path.join('tests', 'test_DF_Search.xlsx'))
     model = list(DataFrameSubsetModel['source_id'].unique())[1] # 'CMCC-ESM2'
     DataFrameSubsetModel = DataFrameSubsetModel.loc[DataFrameSubsetModel['source_id'] == model]
-    varlist = ['so', 'o2', 'thetao']
+    varlist = ['o2', 'so', 'thetao']
 
     dict_true = {'grid_label': ['gn', 'gr', 'gn', 'gr'],
                  'var_test': [[True, True, True],
@@ -219,7 +219,6 @@ def test_check_grid_avail():
     # example: Even though NorESM2-LM has thetao and so for the native grid, it does not have o2, then flag it and do not intake native grid files.
     # ...NorESM2-LM has all thetao, so, and o2 in the regular grid tho, so this should be included and processed further
 
-
     catch_state = True
 
     dict_test = {'grid_label': [],
@@ -234,21 +233,20 @@ def test_check_grid_avail():
         for grid in ["gn", "gr"]:
             DataFrameSubsetModel_grid = DataFrameSubsetModel_run.loc[DataFrameSubsetModel_run['grid_label'] == grid]  # subsetting for a grid type
             var_test = list(DataFrameSubsetModel_grid['variable_id'].unique())
-
             vart_test_ordered = set(var_test)
             varlist_ordered = set(varlist)
 
-            var_test_final = [i==j for i, j in zip(varlist_ordered, vart_test_ordered)]
-
-            if varlist_ordered == vart_test_ordered:
+            var_test_final = [i==j for i, j in zip(sorted(list(varlist_ordered)), sorted(list(vart_test_ordered)))]
+            if list(varlist_ordered) == list(vart_test_ordered):
                 catch_state = True
+                varlist_ordered = sorted(list(varlist_ordered))
 
             else:
-                missing_var = set(varlist_ordered)- set(vart_test_ordered)
+                missing_var = varlist_ordered - vart_test_ordered
                 # padding for comparison between lists
                 # make a list first
-                vart_test_ordered = list(vart_test_ordered)
-                varlist_ordered = list(varlist_ordered)
+                vart_test_ordered = sorted(list(vart_test_ordered))
+                varlist_ordered = sorted(list(varlist_ordered))
 
                 string_flag = '!'
                 for missing in missing_var:
@@ -271,6 +269,30 @@ def test_check_grid_avail():
 
 #resume from here
 def test_instantiate_logging_file():
+
+    # formatter_line_style = '%(asctime)s - %(levelname)s - %(message)s'
+    # # Create a logger
+    # logger = logging.getLogger(logger_name)
+    # logger.setLevel(logging.INFO)
+    #
+    # # Create a formatter to define the log format
+    # formatter = logging.Formatter(formatter_line_style)
+    #
+    # # Create a file handler to write logs to a file
+    # file_handler = logging.FileHandler(logfilename)
+    # file_handler.setLevel(logging.DEBUG)
+    # file_handler.setFormatter(formatter)
+    #
+    # # Create a stream handler to print logs to the console
+    # console_handler = logging.StreamHandler()
+    # console_handler.setLevel(logging.INFO)  # You can set the desired log level for console output
+    # console_handler.setFormatter(formatter)
+    #
+    # # Add the handlers to the logger
+    # logger.addHandler(console_handler)
+    # logger.addHandler(file_handler)
+    #
+
     pass
 
 def test_check_url_validity():
