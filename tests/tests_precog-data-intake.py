@@ -237,7 +237,7 @@ def test_check_grid_avail():
             varlist_ordered = set(varlist)
 
             var_test_final = [i==j for i, j in zip(sorted(list(varlist_ordered)), sorted(list(vart_test_ordered)))]
-            if list(varlist_ordered) == list(vart_test_ordered):
+            if varlist_ordered == vart_test_ordered:
                 catch_state = True
                 varlist_ordered = sorted(list(varlist_ordered))
 
