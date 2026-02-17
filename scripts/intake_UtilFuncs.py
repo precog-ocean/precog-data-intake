@@ -409,7 +409,7 @@ def check_url_validity(iterable):
             links_working.append((False, url, file_ids))
             continue
 
-    if any(links_working):
+    if any([sublist[0] for sublist in links_working]): #grab all individual url boolean results for the file
         file_downloadable.append(True)
     else:
         file_downloadable.append(False)
@@ -426,9 +426,7 @@ def link_traverser(DownloadableDF):
     iterable = []
 
     for idx in range(0, len(DownloadableDF_tested)):
-        # idx=0 #delete just for testing now
         nested_url_list = [DownloadableDF_tested.iloc[idx]['HTTPServer']]
-        # df_downloadable_T_S_o2.iloc[idx]['OPENDAP']]
         flattened_list = [item for sublist in nested_url_list for item in sublist]
         file_id = DownloadableDF_tested.iloc[idx]['path']
         iterable.append((flattened_list, file_id))
@@ -462,7 +460,6 @@ def link_traverser(DownloadableDF):
             print(
                 f'File {os.path.basename(item[0][0][2])} not downloadable')  # look above for navigation onto the nested lists
         state.append(item[1][0])
-    # DownloadableDF['state'] = state
     # appending new column to dataframe
     DownloadableDF_tested['Downloadable'] = None
     for idx, val in enumerate(state):
@@ -477,7 +474,6 @@ def link_traverser(DownloadableDF):
     DownloadableDF_tested['local_path'] = None
     for idx, val in enumerate(local_paths):
         DownloadableDF_tested.loc[idx, 'local_path'] = val
-    # DownloadableDF['local_path'] = local_paths
 
     return DownloadableDF_tested
 
