@@ -161,7 +161,7 @@ if combine.lower().strip(" ") in ['y', 'yes']:
         print(result)
         DFCombined = pd.concat([DFCombined, result], axis=0)
 
-   ## then pass to catalog traverser
+   ## then pass to catalogue traverser
     logger = instantiate_logging_file(logfilename + '_' + loglabelstr + '.txt', logger_name=loglabelstr)
     models_to_discard, model_DF_test_grids_concatenated, df_downloadable = catalog_traverser(logger, DFCombined, chosen_vars)
 
