@@ -525,7 +525,7 @@ def test_download_files():
         with open(file_fullname, mode="wb") as file:
             pbar = tqdm(unit="B", unit_scale=True, unit_divisor=1024, miniters=1,
                         total=max_bytes)  # Progress up to 10%
-            pbar.set_description("Downloading « %s » (10%% test)" % file_name)
+            pbar.set_description("Downloading « %s » (1%% test)" % file_name)
             for chunk in response.iter_content(chunk_size=chunk_size):
                 if chunk:  # filter out keep-alive new chunks
                     pbar.update(len(chunk))
