@@ -15,10 +15,10 @@ It is designed to support climate and oceanographic analyses that require consis
 - Export of simple Dataframes for realized ESGF catalogue searches.
 - Verification of server responses and flagging shortlisted ESM outputs as 'Downloadable'.
 - Combined conditional search for availability of PI and Historical runs in CMIP6 models across >1 variable (e.g., `expc` & `epc100`).
-- Parallelized URL checking for fastest connection in case same data are available across different nodes.
-- Batched download of files from multiple ESGF nodes with retry and integrity checks.
-- Local directory layout optimized for downstream analysis tools.
-- Batched search and download of grid cell measures (e.g., `areacello` and `volcello`) with archive snapshot of relaxed regex matches for CMIP6 models of interest.
+- Parallelized URL checks for fastest connection in case same data are available across different nodes.
+- Batch download of files from multiple ESGF nodes with retry and integrity checks.
+- Local directory layout optimised for downstream analysis.
+- Batch search and download of grid cell measures (e.g., `areacello` and `volcello`) with archive snapshot of relaxed regex matches for CMIP6 models of interest.
 
 ## Installation
 
@@ -68,12 +68,12 @@ If you see the PREGOC logo followed by Hellen, the vampire squid from hell, bein
 ## Repository structure
 ```                
 precog-data-intake/
-├─.venv/                 # Hidden folder with virtual enviroment dependencies               
 ├─ intake_esgf_mods/     # Modified Python modules from the main package "esgf-intake"
 ├─ misc_images/          # Images (these are renderered as ASCII art headers and footers in the CLI)
+├─ paper/                # JOSS submission files and configs for automated pdf draft generator through GitHub actions.
 ├─ scripts/              # Main workflows to be run as command line scripts (see notebooks for examples)
-├─ notebooks/            # Example notebooks of usage
-└─ tests/                # Basic tests for core functionality
+├─ notebooks/            # Guided tutorials
+└─ tests/                # Unit tests for core functionality
 ```
 
 ## Workflow

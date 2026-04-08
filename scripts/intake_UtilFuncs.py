@@ -400,12 +400,17 @@ def check_url_validity(iterable):
     file_downloadable = []
 
     for url in urls:
-        response = requests.get(url, stream=True)
-        time.sleep(5)
-        if response.status_code == 200:
-            links_working.append((True, url, file_ids))
-            break
-        else:
+        try:
+            response = requests.get(url, stream=True)
+            time.sleep(5)
+            if response.status_code == 200:
+                links_working.append((True, url, file_ids))
+                break
+            else:
+                links_working.append((False, url, file_ids))
+                continue
+        except requests.exceptions.ConnectTimeout as e:
+            print(f"Connection timed out for URL: {url}. \n Error: {e} \n*2")
             links_working.append((False, url, file_ids))
             continue
 

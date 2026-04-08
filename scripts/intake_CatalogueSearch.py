@@ -153,7 +153,7 @@ if combine.lower().strip(" ") in ['y', 'yes']:
     loglabelstr = ""
     for var in chosen_vars:
         loglabelstr = loglabelstr + var + "_"
-    loglabelstr = loglabelstr + 'log'
+    loglabelstr = loglabelstr + '.log'
 
     # and add function to concatenate dataframes from dic of chosen vars
     for idx, oceanvarname in enumerate(DicDataframeSearches['variable_names']):
@@ -162,7 +162,7 @@ if combine.lower().strip(" ") in ['y', 'yes']:
         DFCombined = pd.concat([DFCombined, result], axis=0)
 
    ## then pass to catalogue traverser
-    logger = instantiate_logging_file(logfilename + '_' + loglabelstr + '.txt', logger_name=loglabelstr)
+    logger = instantiate_logging_file(logfilename + '_' + loglabelstr , logger_name=loglabelstr)
     models_to_discard, model_DF_test_grids_concatenated, df_downloadable = catalog_traverser(logger, DFCombined, chosen_vars)
 
     models_to_keep = df_downloadable['source_id'].unique().tolist()
@@ -187,10 +187,10 @@ else:
         chosen_vars = oceanvarname
         print(f"###### Testing {oceanvarname} ######")
         loglabelstr = ""
-        loglabelstr = oceanvarname + '_' + 'log'
+        loglabelstr = oceanvarname + '_' + '.log'
 
         ## then pass to catalog traverser
-        logger = instantiate_logging_file(logfilename + '_' + loglabelstr + '.txt', logger_name=loglabelstr)
+        logger = instantiate_logging_file(logfilename + '_' + loglabelstr, logger_name=loglabelstr)
         models_to_discard, model_DF_test_grids_concatenated, df_downloadable = catalog_traverser(logger,
                                                                                                  DicDataframeSearches['search_results'][idx],
                                                                                                  chosen_vars)
