@@ -38,7 +38,7 @@ def calculate_hash(file_path):
 
 def download_files(DF_Downloadable_single_line, download_path):
 
-    file_path = DF_Downloadable_single_line.iloc[0]['local_path']  # complete - todo remove the first two levels from path to build the filename
+    file_path = DF_Downloadable_single_line.iloc[0]['local_path']  # complete - TODO remove the first two levels from path to build the filename
     file_name = os.path.basename(file_path)
     outpath = os.path.join(download_path, os.path.dirname(file_path))
     file_fullname = os.path.join(outpath, file_name)
@@ -50,7 +50,7 @@ def download_files(DF_Downloadable_single_line, download_path):
 
     if DF_Downloadable_single_line.iloc[0]['Downloadable'] == True and not os.path.isfile(file_fullname):  # if downloadable and file has not been downloaded yet#
 
-        # complete - TODO improvement change this call to func that retrieves the best url for the file in question
+        # complete TODO - Complete improvement change this call to func that retrieves the best url for the file in question
         url_test = test_dwnld_speed(DF_Downloadable_single_line)
 
         # url_list_str = DF_Downloadable_single_line.iloc[0]['HTTPServer']
@@ -107,17 +107,31 @@ def test_dwnld_speed(df_single_line):
     download_speeds = []
 
     for url in url_list:
-        response = requests.get(url, stream=True)
-        chunk_size = 2 ** 20  # 1Mb in bytes
+        # Complete TODO - check if no timeout error is raised with the url and if so remove it from the list of urls for that file and test the next best url until one works.
+        try:
+            response = requests.get(url, stream=True)
+            if response.status_code == 200:
+                chunk_size = 2 ** 20  # 1Mb in bytes
+                for chunk in response.iter_content(
+                        chunk_size=chunk_size):  # just do a dummy chunk download per url to test speed based on user's connection
+                    if chunk:
+                        download_speed = round((len(chunk) / (response.elapsed.microseconds)), 2)  # conversion to MBPS is numerically identical when data are in bytes per microsecond
+                        # print(f'Downloading speed is {download_speed} Mbps for url: {url}')
+                        break
+                download_speeds.append(download_speed)
 
-        for chunk in response.iter_content(
-                chunk_size=chunk_size):  # just do a dummy chunk download per url to test speed based on user's connection
-            if chunk:
-                download_speed = round((len(chunk) / (response.elapsed.microseconds)), 2)  # conversion to MBPS is numerically identical when data are in bytes per microsecond
-                # print(f'Downloading speed is {download_speed} Mbps for url: {url}')
-                break
+            else:
+                if response.status_code == 404:
+                    print(f"File not found at server {url}")
+                    print("Trying next url if available...\n")
+                    download_speeds.append(0)
+                    continue
 
-        download_speeds.append(download_speed)
+        except requests.ConnectTimeout as e:
+            print(f"Connect timeout for {url}.\nError: {e}")
+            print("Trying next url if available...\n")
+            download_speeds.append(0)
+            continue
 
     # now return the url with fatest speed and use that
     # get indx of highest speed in the list
