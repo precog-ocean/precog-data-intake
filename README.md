@@ -109,6 +109,6 @@ to find amongst CMIP6 models those that contain both ```piControl``` and ```hist
  'expc' :   Downward Flux of Particulate Organic Carbon fully-resolved at depth [mol m-2 s-1]
 ```
 
-This self-guided notebook demonstrates a compound search, an exemple add-on function for screening ESFG catalogue hits,
+This self-guided notebook demonstrates a compound search, an exemple add-on function for screening ESGF catalogue hits,
 how to instanciate the download manager and how to automatically fetch corresponding ocean grid cell measure variables
 ```areacello``` and ```volcello``` for the selected models.
